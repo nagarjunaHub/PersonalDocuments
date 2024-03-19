@@ -1,0 +1,56 @@
+name: Run RTC-GIT Report
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  
+  # push:
+  workflow_dispatch:
+
+jobs:
+  run_report:
+    env:
+      user: "HRP1SF"
+      git_password: ${{ secrets.HRP1SF_PASS }}
+      git_token: ${{ secrets.HRP1SF_TOKEN }}
+      git_server: "https://github.boschdevcloud.com"
+      git_repo: "AEPJSWAUT/demo"
+      commits_start_date: "beginning"
+      commits_end_date: "today"
+      ALM_PA: "AEPJSWAUT"
+      ALM_server: "https://rb-alm-11-d.de.bosch.com"
+      queryID: "_BdOM0HtcEeuqUpRyY6siCw"
+      output_folder_container: "/data/"
+      platform: "GitHubEnterprise"
+
+    runs-on: HRP1SF
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run report - cron
+        if: github.event_name == 'cron'
+        run: |
+            docker login -u eje1cob -p ${{ secrets.EJE1COB }} https://rb-dtr.de.bosch.com/ 
+            docker pull rb-dtr.de.bosch.com/aepjsw/rtc-git-linker-report_dev:latest
+            docker run -itd -v ${{env.GITHUB_WORKSPACE}}:${{env.output_folder_container}} -e git_password=${{env.git_password}} -e git_token=${{env.git_token}} rb-dtr.de.bosch.com/aepjsw/rtc-git-linker-report_dev:latest ${{env.user}}  ${{env.git_server}} ${{env.git_repo}} ${{env.commit_start_date}} ${{env.commit_end_date}} ${{env.ALM_PA}} ${{env.ALM_server}} ${{env.queryID}} ${{env.output_folder_container}} ${{env.platform}} 
+        
+      - name: Run report - dispatch
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+            docker login -u eje1cob -p ${{ secrets.EJE1COB }} https://rb-dtr.de.bosch.com/ 
+            docker pull rb-dtr.de.bosch.com/aepjsw/rtc-git-linker-report_dev:latest
+            docker run -itd -v ${{github.workspace}}:${{env.output_folder_container}} -e git_password=${{env.git_password}} -e git_token=${{env.git_token}} rb-dtr.de.bosch.com/aepjsw/rtc-git-linker-report_dev:latest ${{env.user}}  ${{env.git_server}} ${{env.git_repo}} "beginning" "today" ${{env.ALM_PA}} ${{env.ALM_server}} ${{env.queryID}} ${{env.output_folder_container}} ${{env.platform}} 
+            sleep 5
+      # - name: Build Docker image
+      #   if: github.event_name == 'push'
+      #   run: |
+      #       $tag = "rb-dtr.de.bosch.com/aepjsw/rtc-git-linker-report_dev:" + (git rev-parse --short HEAD) + "_" + (git show -s --format=%ci HEAD).substring(0,10) ; docker build ./ --tag $tag --tag rb-dtr.de.bosch.com/aepjsw/rtc-git-linker-report_dev:latest
+      #       docker login -u eje1cob -p ${{ secrets.EJE1COB }} https://rb-dtr.de.bosch.com/ 
+      #       docker push rb-dtr.de.bosch.com/aepjsw/rtc-git-linker-report_dev:latest
+
+      - name: Archive report results
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v2
+        with:
+          name: RTC-GIT_report
+          path: ${{github.workspace}}/**/*git_export.csv

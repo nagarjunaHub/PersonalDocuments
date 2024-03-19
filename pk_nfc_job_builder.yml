@@ -1,0 +1,657 @@
+- defaults:
+    name: global
+    domain : PK
+    project : NFC
+
+    projectArtRepo: aebe-pk-nfc-local
+    projectArtCreds: pk-nfc-tech-pbc1cob
+    projectArtApi: pbc1cob-art-api
+
+    MMENDPOINT: https://mattermost.boschdevcloud.com/hooks/qdhx7w8g1jretgod4o96cg6mpe
+
+    rtcCredentials: pk-nfc-tech-pbc1cob
+    loadRulePath: rbd_pk_pf_sw_Development_self/_loadrule/STREAM.loadrule
+    testerLoadRulePath: rbd_pk_pf_sw_Development_self/_loadrule/test_framework.loadrule
+
+    fossidCredentials: jev3lr-fossid-api
+
+    jjbTokenCredId: pk-nfc-tech-pbc1cob
+    jjbRepo: aebe-devops-local
+    jjbCreatorArtApi: pk-nfc-tech-pbc1cob
+    jjbCreatorArtCredId: Jenkins_Tech_User
+
+    
+    FAIL_MAIL_DEFAULT: >
+        Nagarjuna.Badigunchala@in.bosch.com
+
+    gitUrl: https://sourcecode.socialcoding.bosch.com/scm/pk/pk_devops.git
+    gitCredentials: pk-nfc-tech-pbc1cob
+    gitBranch: '*/master'
+    gitTool: Default
+    gitToolWin: si-z667r_buildslaves
+    
+    streamCreatorPipelinePaths: pipelines/streamCreator.groovy
+
+    streamTeardownPipelinePath: pipelines/streamTeardown.groovy
+    streamTeardownConfigLocation: pipelines/_config/pk_nfc_job_builder.yml
+
+    onCommitPipelinePath: pipelines/onCommit.groovy
+    onCommitConfigLocation: JWS/rbd/pk/tools/CICD/job_config/onCommit.yml
+
+    manualPipelinePath: pipelines/manual.groovy
+    validationPipelinePath: pipelines/validation.groovy
+    validationConfigLocation: JWS/rbd/pk/tools/CICD/job_config/validation.yml
+
+    pullRequestPipelinePath: pipelines/pullRequest.groovy
+    pullRequestConfigLocation: JWS/rbd/pk/tools/CICD/job_config/pullRequest.yml
+
+    rebasePipelinePath: pipelines/rebase.groovy
+    rebaseConfigLocation: JWS/rbd/pk/tools/CICD/job_config/rebase.yml
+
+    mergePipelinePath: pipelines/merge.groovy
+    mergeConfigLocation: JWS/rbd/pk/tools/CICD/job_config/merge.yml
+
+    releasePipelinePath: pipelines/release.groovy
+    releaseConfigLocation: JWS/rbd/pk/tools/CICD/job_config/release.yml
+
+    notificationsConfigLocation: JWS/rbd/pk/tools/CICD/job_config/notifications.yml
+    
+    jobUpdaterPipelinePath: pipelines/jobUpdater.groovy
+
+    cdq0302PipelinePath: pipelines/metGenJa.groovy
+
+    targetStream: rbd_pk_cv_pf_nfc_Development
+    componentFilter: '* !rbd.pk.tools.CICD_cfg'
+    permanentStream:
+        - rbd_pk_cv_pf_nfc_Development
+
+    authorizationMatrixRawXml: >
+        <hudson.security.AuthorizationMatrixProperty>
+            <inheritanceStrategy class="org.jenkinsci.plugins.matrixauth.inheritance.InheritParentStrategy"/>
+            <permission>hudson.model.Item.Build:Cob2_RBEI_AE_BE_PKCV_ADM</permission>
+            <permission>hudson.model.Item.Cancel:Cob2_RBEI_AE_BE_PKCV_ADM</permission>
+            <permission>hudson.model.Item.Read:Cob2_RBEI_AE_BE_PKCV_ADM</permission>
+            <permission>hudson.model.Item.Workspace:Cob2_RBEI_AE_BE_PKCV_ADM</permission>
+            <permission>hudson.model.Run.Replay:Cob2_RBEI_AE_BE_PKCV_ADM</permission>
+        </hudson.security.AuthorizationMatrixProperty>
+    
+    scmRawXml: >
+        <scm class="hudson.plugins.git.GitSCM" plugin="git@4.0.0-rc">
+            <configVersion>2</configVersion>
+            <userRemoteConfigs>
+                <hudson.plugins.git.UserRemoteConfig>
+                <url>{gitUrl}</url>
+                <credentialsId>{gitCredentials}</credentialsId>
+                </hudson.plugins.git.UserRemoteConfig>
+            </userRemoteConfigs>
+            <branches>
+                <hudson.plugins.git.BranchSpec>
+                <name>{gitBranch}</name>
+                </hudson.plugins.git.BranchSpec>
+            </branches>
+            <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+            <gitTool>{gitTool}</gitTool>
+            <submoduleCfg class="list"/>
+            <extensions>
+                <hudson.plugins.git.extensions.impl.IgnoreNotifyCommit/>
+            </extensions>
+        </scm>
+
+    timeZone: Asia/Calcutta
+    nightlyDisabled: true
+    weeklyDisabled: true
+    smokeTestDir: JWS/rbd/pk/pf/sw/intTest/onTarget/brownsnake
+    unitTestDir: 'C:/utestTmp'
+    stream: Dev
+    rtcStream: rbd_pk_cv_pf_nfc_Development
+
+    commonProps: |
+        DOMAIN={domain}
+        PROJECT={project}
+        STREAM={stream}
+        MM_ENDPOINT={MMENDPOINT}
+        FAIL_MAIL_DEFAULT={FAIL_MAIL_DEFAULT}
+        rtcStream={rtcStream}
+        rtcCredentials={rtcCredentials}
+        loadRulePath={loadRulePath}
+        testerLoadRulePath={testerLoadRulePath}
+        gitBranch={gitBranch}
+        gitUrl={gitUrl}
+        gitCredentials={gitCredentials}
+        projectArtRepo={projectArtRepo} 
+        projectArtCreds={projectArtCreds}
+        projectArtApi={projectArtApi}
+        timeZone={timeZone}
+        smokeTestDir={smokeTestDir}
+        unitTestDir={unitTestDir}
+        fossidCredentials={fossidCredentials}
+
+- project:
+    name: NFC_Configuration
+
+    nightlyTrigger: |-
+        TZ=Asia/Calcutta
+        H 23 * * 1-5
+    weeklyTrigger: |-
+        TZ=Asia/Calcutta
+        0 6 * * 6
+
+    jobs:
+    # - '{domain}/{domain}_{project}/{domain}_{project}_stream_creator'
+    # - '{domain}/{domain}_{project}/{domain}_{project}_stream_teardown'
+    - '{domain}/{domain}_{project}/{domain}_{project}_jobUpdater'
+    # - '{domain}/{domain}_{project}/{domain}_{project}_Manual'
+    - '{project}_full_permStream_template':
+        stream: dev
+        rtcStream: rbd_pk_cv_pf_nfc_Development
+        destination: '{domain}/{domain}_{project}'
+        nightlyDisabled: false
+        weeklyDisabled: false
+    # - '{project}_int_release_template':
+        # stream: int
+        # rtcStream: rbd_pk_pf_sw_Int
+        # destination: '{domain}/{domain}_{project}'
+    # - '{project}_full_tempStream_template':
+        # stream: DevUwb
+        # rtcStream: rbd_pk_cv_pf_nfc_Development
+        # destination: '{domain}/{domain}_{project}/{stream}'
+
+- job-group:
+    name: '{project}_full_permStream_template'
+    jobs:
+        - '{destination}/{domain}_{project}_{stream}_onCommit'
+        # - '{destination}/{domain}_{project}_{stream}_{PIPELINE}':
+            # PIPELINE: Nightly
+            # timerTrigger: '{nightlyTrigger}'
+            # execute: '{nightlyDisabled}'
+        # - '{destination}/{domain}_{project}_{stream}_{PIPELINE}':
+            # PIPELINE: Weekly
+            # timerTrigger: '{weeklyTrigger}'
+            # execute: '{weeklyDisabled}'
+        # - '{destination}/{domain}_{project}_Int_Merge'
+        # - '{destination}/{domain}_{project}_MeGenJa'
+        # - '{destination}/{domain}_{project}_ALM_Dashboard_Updater'
+
+- job-group:
+    name: '{project}_full_tempStream_template'
+    jobs:
+        - '{domain}/{domain}_{project}/{stream}'
+        - '{destination}/{domain}_{project}_{stream}_onCommit':
+            alias: onCommit
+        - '{destination}/{domain}_{project}_{stream}_{PIPELINE}':
+            alias: Nightly
+            PIPELINE: Nightly
+            timerTrigger: '{nightlyTrigger}'
+            execute: '{nightlyDisabled}'
+        - '{destination}/{domain}_{project}_{stream}_pullRequest':
+            alias: pullRequest
+        - '{destination}/{domain}_{project}_{stream}_rebase':
+            alias: rebase
+
+- job-group:
+    name: '{project}_int_release_template'
+    jobs:
+        - '{destination}/{domain}_{project}_{stream}_onCommit'
+        - '{destination}/{domain}_{project}_{stream}_Release'
+
+- job-template:
+    name: '{domain}/{domain}_{project}/{stream}'
+    project-type: folder
+
+# onCommit job template
+- job-template:
+    name: '{destination}/{domain}_{project}_{stream}_onCommit'
+    concurrent: false
+    disabled: false
+
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: '{onCommitPipelinePath}'
+    project-type: pipeline
+    properties:
+    - inject:
+        properties-content: |
+            {commonProps}
+            
+            pipelineConfigLocation={onCommitConfigLocation}
+            notificationsConfigLocation={notificationsConfigLocation}
+    - raw:
+        xml: |
+          {authorizationMatrixRawXml}
+    triggers:
+    - pollscm:
+        cron: H/5 * * * *
+        ignore-post-commit-hooks: false
+
+# ALM Dashboard job template
+- job-template:
+    name: '{destination}/{domain}_{project}_ALM_Dashboard_Updater'
+    concurrent: false
+    disabled: false
+
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: 'pipelines/alm_dashboard.groovy'
+    project-type: pipeline
+    properties:
+    - raw:
+        xml: |
+          {authorizationMatrixRawXml}
+    triggers:
+    - timed: |-
+        TZ=Australia/Melbourne
+        0 0 * * *
+        0 12 * * *
+
+# CDQ0302 job template
+- job-template:
+    name: '{destination}/{domain}_{project}_MeGenJa'
+    concurrent: false
+    disabled: false
+
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: '{cdq0302PipelinePath}'
+    project-type: pipeline
+    properties:
+    - inject:
+        properties-content: |
+            artifactoryProject=Artifactory_PK
+            repo=aebe-pk-local
+            domain=PK
+            project=PF
+            stream=dev
+            api=073rcl-Art-Api
+            configPass=Credentials
+            configScm=GitSCM
+            configBranch=*/master
+            configGitTool=si-z667r_buildslaves
+            configCred=pk-tech-073rcl
+            configRepo=https://sourcecode.socialcoding.bosch.com/scm/pk/pk_devops.git
+            metricType=resource_usage
+            rtcCredentials=pk-tech-073rcl
+            doorsCred=c0d2453c-5989-465e-8bf5-18b289629462
+            failMail={FAIL_MAIL_DEFAULT}
+    - raw:
+        xml: |
+          {authorizationMatrixRawXml}
+    triggers:
+    - timed: |-
+        TZ=Australia/Melbourne
+        H 8 * * 1-5
+
+# merge job template
+- job-template:
+    name: '{destination}/{domain}_{project}_Int_Merge'
+    concurrent: false
+    disabled: false
+
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: '{mergePipelinePath}'
+    project-type: pipeline
+    properties:
+    - inject:
+        properties-content: |
+            {commonProps}
+            pipelineConfigLocation={mergeConfigLocation}
+            notificationsConfigLocation={notificationsConfigLocation}
+            targetStream=rbd_pk_pf_sw_Int
+    - raw:
+        xml: |
+          {authorizationMatrixRawXml}
+
+# release job template
+- job-template:
+    name: '{destination}/{domain}_{project}_{stream}_Release'
+    concurrent: false
+    disabled: false
+    
+    parameters:
+    - string:
+        default: ''
+        description: RTC work item ID for the release ticket
+        name: Ticket
+        trim: 'false'
+    - string:
+        default: ''
+        description: Optional notes to add to the release email
+        name: Notes
+        trim: 'false'
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: '{releasePipelinePath}'
+    project-type: pipeline
+    properties:
+    - inject:
+        properties-content: |
+            {commonProps}
+            pipelineConfigLocation={releaseConfigLocation}
+    - raw:
+        xml: |
+          {authorizationMatrixRawXml}
+
+# stream_creator template
+- job-template:
+    name: '{domain}/{domain}_{project}/{domain}_{project}_stream_creator'
+    concurrent: true
+    disabled: false
+
+    parameters:
+    - string:
+        name: BASE_SNAPSHOT_NAME
+        default: ''
+        description: REQUIRED PARAMETER | New stream's inital baseline from a given snapshot name
+    - string:
+        name: WORKITEM_NUM
+        default: ''
+        description: REQUIRED PARAMETER | NUMERIC ONLY | Designated work item for the task
+    - string:
+        name: SHORT_DESC
+        default: ''
+        description: REQUIRED PARAMETER | NO WHITESPACE | 100 characters limit | Short description of the task
+    - string:
+        name: OWNER_NAME
+        default: ''
+        description: REQUIRED PARAMETER | NO WHITESPACE | Owner of the stream
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: '{streamCreatorPipelinePaths}'
+    project-type: pipeline
+    properties:
+    - inject:
+        properties-content: |
+            {commonProps}
+            artifactoryCredId={jjbCreatorArtCredId}
+            repo={jjbRepo}
+            jobCreatorArtApi={jjbCreatorArtApi}
+            jenkinsTokenCredId={jjbTokenCredId}
+    - raw:
+        xml: |
+          {authorizationMatrixRawXml}
+
+# validation job template
+- job-template:
+    name: '{destination}/{domain}_{project}_{stream}_{PIPELINE}'
+    concurrent: false
+    disabled: '{execute}'
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: '{validationPipelinePath}'
+    project-type: pipeline
+    properties:
+    - inject:
+        properties-content: |
+            {commonProps}
+            PIPELINE={PIPELINE}
+            pipelineConfigLocation={validationConfigLocation}
+            notificationsConfigLocation={notificationsConfigLocation}
+    - raw:
+        xml: |
+          {authorizationMatrixRawXml}
+    triggers:
+    - timed: |-
+        {timerTrigger}
+
+- job-template:
+    name: '{domain}/{domain}_{project}/{domain}_{project}_Manual'
+    concurrent: true
+    disabled: false
+
+    parameters:
+    - string:
+        default: latest
+        description: |-
+          Your chooice of repository workspace to be loaded on the integration tester.
+          latest -> use the latest; else use your own workspace;
+          NOTE : that this job does not build your repository workspace;
+          Rather useful for testing automated testing scripts
+        name: BUILDWORKSPACE
+        trim: 'false'
+    - string:
+        default: ''
+        description: Your choice of stream to execute on
+        name: STREAM
+    - choice:
+        choices:
+        - pk_tester
+        - pk_uwb_tester
+        description: Choose which tester would you like to run your test on.
+        name: TEST_ENV
+    - choice:
+        choices:
+        - onCommit
+        - Nightly
+        - Weekly
+        - Release
+        description: |-
+          CTR test set to run according to the validation.yml
+          Please use TESTCASE_LIST to run your own sets of runlist if required
+        name: TEST_SET
+        trim: 'false'
+    - string:
+        default: latest
+        description: |-
+          If == latest -> will choose the latest binary from the onCommit job;
+          else -> will try to fetch the version properties from the chosen STREAM;
+          e.g PF_02_00_018_20190819_143116 with stream : Dev as attribute
+        name: VERSION
+        trim: 'false'
+    - text:
+        default: default
+        description: |-
+          If it's no longer `default` it will use this variable to put 
+          a custom runlist outside of the validation.yml
+        name: TESTCASE_LIST
+        trim: 'false'
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: '{manualPipelinePath}'
+    project-type: pipeline
+    properties:
+    properties:
+    - inject:
+        properties-content: |
+            {commonProps}
+            pipelineConfigLocation={validationConfigLocation}
+            onCommitConfigLocation={onCommitConfigLocation}
+            releaseConfigLocation={releaseConfigLocation}
+            notificationsConfigLocation={notificationsConfigLocation}
+    - raw:
+        xml: |
+          {authorizationMatrixRawXml}
+
+# pullRequest job template
+- job-template:
+    name: '{destination}/{domain}_{project}_{stream}_pullRequest'
+    concurrent: false
+    disabled: false
+
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: '{pullRequestPipelinePath}'
+    project-type: pipeline
+    properties:
+    - inject:
+        properties-content: |
+            {commonProps}
+            pipelineConfigLocation={pullRequestConfigLocation}
+            notificationsConfigLocation={notificationsConfigLocation}
+            targetStream={targetStream}
+    - raw:
+        xml: |
+          {authorizationMatrixRawXml}
+
+# rebase job template
+- job-template:
+    name: '{destination}/{domain}_{project}_{stream}_rebase'
+    concurrent: false
+    disabled: false
+
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: '{rebasePipelinePath}'
+    project-type: pipeline
+    properties:
+    - inject:
+        properties-content: |
+            {commonProps}
+            pipelineConfigLocation={rebaseConfigLocation}
+            notificationsConfigLocation={notificationsConfigLocation}
+            targetStream={targetStream}
+    - raw:
+        xml: |
+          {authorizationMatrixRawXml}
+
+# job updater template
+- job-template:
+    name: '{domain}/{domain}_{project}/{domain}_{project}_jobUpdater'
+    concurrent: true
+    disabled: false
+
+    parameters:
+    - string:
+        name: gitBranch
+        default: '*/master'
+        description: REQUIRED PARAMETER | New stream's inital baseline from a given snapshot name
+    - string:
+        name: node
+        default: 'si-z667r_buildslaves'
+        description: REQUIRED PARAMETER | Which node would you like to run this job on ?
+    - string:
+        name: updateTemporaryJobs
+        default: 'True'
+        description: REQUIRED PARAMETER | Left true shall update the temporary jobs as well.
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: '{jobUpdaterPipelinePath}'
+    project-type: pipeline
+    properties:
+    - inject:
+        properties-content: |
+            {commonProps}
+            artifactoryCredId={jjbCreatorArtCredId}
+            repo={jjbRepo}
+            jobCreatorArtApi={jjbCreatorArtApi}
+            jenkinsTokenCredId={jjbTokenCredId}
+    - authorization:
+        chm1cl:
+            - credentials-create
+            - credentials-delete
+            - credentials-manage-domains
+            - credentials-update
+            - credentials-view
+            - job-build
+            - job-cancel
+            - job-configure
+            - job-delete
+            - job-discover
+            - job-extended-read
+            - job-move
+            - job-read
+            - job-status
+            - job-workspace
+            - ownership-jobs
+            - run-delete
+            - run-replay
+            - run-update
+            - scm-tag
+        utn1cl:
+            - credentials-create
+            - credentials-delete
+            - credentials-manage-domains
+            - credentials-update
+            - credentials-view
+            - job-build
+            - job-cancel
+            - job-configure
+            - job-delete
+            - job-discover
+            - job-extended-read
+            - job-move
+            - job-read
+            - job-status
+            - job-workspace
+            - ownership-jobs
+            - run-delete
+            - run-replay
+            - run-update
+            - scm-tag
+
+# stream_teardown template
+- job-template:
+    name: '{domain}/{domain}_{project}/{domain}_{project}_stream_teardown'
+    concurrent: true
+    disabled: false
+
+    parameters:
+    - string:
+        name: STREAM_NAME
+        default: ''
+        description: REQUIRED PARAMETER | Stream To Delete
+    pipeline-scm:
+      lightweight-checkout: true
+      scm:
+        - raw:
+            xml: |
+              {scmRawXml}
+      script-path: '{streamTeardownPipelinePath}'
+    project-type: pipeline
+    properties:
+    - inject:
+        properties-content: |
+            {commonProps}
+            artifactoryCredId={jjbCreatorArtCredId}
+            repo={jjbRepo}
+            jobCreatorArtApi={jjbCreatorArtApi}
+            jenkinsTokenCredId={jjbTokenCredId}
+            targetStream={targetStream}
+            componentFilter={componentFilter}
+            pipelineConfigLocation={streamTeardownConfigLocation}
+    - raw:
+        xml: |
+          {authorizationMatrixRawXml}

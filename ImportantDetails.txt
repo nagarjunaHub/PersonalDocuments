@@ -1,0 +1,30 @@
+Documents:
+	PRAN	110064690288
+	UAN	100630762434
+	AADHAR	209179839252
+	PF A/C NO 		BG/BNG/23458/0022834
+	EPS A/C NO		BG/BNG/23458/0022834
+	PF NO(Cyient) 		KN/46998/1837
+	UAN(Cyient)		100105127586
+	Member ID(Cyient)	PYBOM00469980000001837
+
+Loans:
+	HDFC (7,50,000) - 11.29 - 5 Yrs -  04/05/2017
+	Loan a/c number: 46845660
+	HL528731660
+	Nag@hdfcbank21
+
+	Indusind (8,00,000) - 10.99 - 4Yrs - 04/12/2018
+	Loan a/c number: 701000527646
+
+Deutsche Bank A/C
+DB: DE49 6007 0024 0819 3567 00
+SWIFT: DEUTDEDBSTG
+240 8193567 00 59098
+
+
+PF, Superannuation: https://www.ess.adp.in/ESS4/
+NPS: https://www.cra-nsdl.com/CRA/
+
+
+
